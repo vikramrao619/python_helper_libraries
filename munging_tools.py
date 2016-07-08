@@ -6,7 +6,7 @@ def winsorizer(frame, columns, percentile):
     
     '''This function takes in a dataframe, a list of columns, and a percentile.
        It winsorizes each of the columns in the frame based on the proportion.
-       It then returns the frame. This function deals with na values appropriately.'''
+       It then returns the frame. NA values are dealt with appropriately.'''
   
     if type(columns) == list:
 
@@ -28,8 +28,9 @@ def winsorizer(frame, columns, percentile):
     
 def breakdown(frame, column):
     
-    '''This function takes in a dataframe and column. It does a more comprehensive
-       description.'''
+    '''This function takes in a dataframe and column. It gives a more 
+       comprehensive description than the describe function and also deals 
+       with NAs which screw up percentile statistics.'''
     
     index_list = [
         'count',
@@ -46,7 +47,7 @@ def breakdown(frame, column):
         'max',
         'mean',
         'stddev',
-        'variance'        
+        'variance'
     ]
     
     
@@ -61,15 +62,15 @@ def breakdown(frame, column):
     description_series['stddev'] = cleaned.std()
     description_series['variance'] = cleaned.var()
     description_series.rename({'count': 'non_null_count'})
-    final = description_series.reindex(index_list).round(2)
-    return final
+    return description_series.reindex(index_list).round(2)
     
 def column_filterer(frame, col_whitelist_dict):
     
     '''This function takes a dataframe and a column whitelist dict.
        The keys of this dict are column names (strings) and the values
        are lists of whitelisted values. The function returns a frame that
-       contains only rows for which '''
+       contains only rows for which the selected columns have values 
+       contained in their corresponding whitelist.'''
     
     master_mask = Series([True] * len(frame.index))
     
